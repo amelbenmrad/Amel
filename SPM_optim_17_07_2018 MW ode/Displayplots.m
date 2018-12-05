@@ -5,14 +5,14 @@ T = res.sol(:, :, 3);
 r_pol = res.sol(:, end, 4); % [m]
 
 for k=1:length(r_pol)
-x(k,:) = (0: r_pol(k)/100: r_pol(k));                            % [m]
+x(k,:) = (0: r_pol(k)/100: r_pol(k));                            %[m]
 end
 
-kp = P.kp_ref * exp(-P.Ea./ P.R.*(1 ./ T - 1 / P.T_ref));        % m3/mol/s
+kp = kp_ref * exp(-P.Ea./ P.R.*(1 ./ T - 1 / P.T_ref));          % m3/mol/s
 
 kd = P.kd_ref * exp(-P.Ed ./ P.R.*(1 ./ T - 1 / P.T_ref));       % m3/mol/s
 
-C_star = P.C1_star .* exp(- kd .* res.t') + P.C2_star;           %(mole site/m3 de cata)
+C_star = C1_star .* exp(- kd .* res.t') + C2_star;               %(mole site/m3 de cata)
 
 Rp = kp .* C_star .* C1;                                         %(mol/m3/s)
 
@@ -84,16 +84,16 @@ ylabel('Particle radius (µm)', 'fontsize', 12, 'fontweight' , 'b', 'fontname', '
 % axis([0 inf 20 inf])
 set(gca, 'FontSize', 12, 'fontweight', 'b', 'fontname', 'arial')
 
-v_pol = 4 / 3 * pi() * (r_pol.^3 - P.r_pol0^3*0);
-m_pol=v_pol * 869.8 * 1000; % (g)
-
-figure
-hold all
-plot(res.t/60, m_pol, 'LineWidth', 2)   %sum(A,2) = vecteur colonne contenant la somme des lignes du vecteur A
-xlabel('Time (min)', 'fontsize', 12, 'fontweight', 'b', 'fontname', 'arial')
-ylabel('Total mass of polymer (g)', 'fontsize', 12, 'fontweight' , 'b', 'fontname', 'arial')
-% axis([0 inf 20 inf])
-set(gca, 'FontSize', 12, 'fontweight', 'b', 'fontname', 'arial')
+% v_pol = 4 / 3 * pi() * (r_pol.^3 - P.r_pol0^3); % m3
+% m_pol=v_pol * 869.8 * 1000; % (g per particle)
+% 
+% figure
+% hold all
+% plot(res.t/60, m_pol, 'LineWidth', 2)   %sum(A,2) = vecteur colonne contenant la somme des lignes du vecteur A
+% xlabel('Time (min)', 'fontsize', 12, 'fontweight', 'b', 'fontname', 'arial')
+% ylabel('Total mass of polymer (g)', 'fontsize', 12, 'fontweight' , 'b', 'fontname', 'arial')
+% % axis([0 inf 20 inf])
+% set(gca, 'FontSize', 12, 'fontweight', 'b', 'fontname', 'arial')
 
 %% %%%CONCENTRATION ETHYLENE%%%%%
 
@@ -211,3 +211,31 @@ xlabel('Time (min)', 'fontsize', 12, 'fontweight', 'b', 'fontname', 'arial')
 ylabel('T_s - T_b (°C)', 'fontsize', 12, 'fontweight', 'b', 'fontname', 'arial')
 axis([0 inf 0 20])
 set(gca, 'FontSize', 12, 'fontweight', 'b', 'fontname', 'arial')
+
+%% MWD Plots
+figure
+hold all
+plot(t/60, X(:,1), 'LineWidth', 2) 
+xlabel('Time (min)', 'fontsize', 12, 'fontweight', 'b', 'fontname', 'arial')
+ylabel('Ethylene concentration (mol/m^3)', 'fontsize', 12, 'fontweight' , 'b', 'fontname', 'arial')
+% axis([0 inf 20 inf])
+set(gca, 'FontSize', 12, 'fontweight', 'b', 'fontname', 'arial')
+title('Monomer concentration')
+
+figure
+hold all
+plot(t/60, X(:,6), 'LineWidth', 2) 
+xlabel('Time (min)', 'fontsize', 12, 'fontweight', 'b', 'fontname', 'arial')
+ylabel('Hydrogen concentration (mol/m^3)', 'fontsize', 12, 'fontweight' , 'b', 'fontname', 'arial')
+% axis([0 inf 20 inf])
+set(gca, 'FontSize', 12, 'fontweight', 'b', 'fontname', 'arial')
+title('Hydrogen concentration')
+
+figure
+hold all
+plot(t/60, X(:,3:5), 'LineWidth', 2) 
+xlabel('Time (min)', 'fontsize', 12, 'fontweight', 'b', 'fontname', 'arial')
+ylabel(' (mol/m^3)', 'fontsize', 12, 'fontweight' , 'b', 'fontname', 'arial')
+% axis([0 inf 20 inf])
+set(gca, 'FontSize', 12, 'fontweight', 'b', 'fontname', 'arial')
+title('Moments of dead polymer')

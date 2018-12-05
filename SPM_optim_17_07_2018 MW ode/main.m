@@ -13,13 +13,19 @@ mesures=ans.data;
 option=1;   % Rp1
 [P,t_exp,Rp_exp] = variables(option,mesures); % This option is run only for 1 second
 
+%%
+tfinal=120*60;
+CondInit=[P.C1_eq;P.Tb;0;0;0;P.H2i];
+global P
+[t,X]=ode15s('function_ode_MW',[0 tfinal],CondInit,[]);
+
 %% CI
 kp_ref = 38.3305;                            %constante de vitesse de propagation à Tref (m3/mol site/s)
 D01= 1.7122e-07;                             %[m²/s]
 C1_star=1.0237;
 C2_star=   0.7960;
 
-option_opt=1;                                %0: No optimization // 1: optimization
+option_opt=0;                                %0: No optimization // 1: optimization
 global ic2
 if option_opt == 1
     %% Optimisation

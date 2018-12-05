@@ -5,21 +5,14 @@ T = res.sol(:, :, 3);
 r_pol = res.sol(:, end, 4); % [m]
 
 for k=1:length(r_pol)
-x(k,:) = (0: r_pol(k)/100: r_pol(k));                                        % [m]
+x(k,:) = (0: r_pol(k)/100: r_pol(k));                            %[m]
 end
 
-% disp('The volume of produced polymer (m3) = ')
-% v_pol=4/3*pi()*(res.r_pol(end)^3-P.r_pol0^3)
-% disp('The mass of produced polymer (g) = ')
-% m_pol=v_pol*869.8*1000
-% disp('Facteur de croissance = ')
-% res.r_pol(end)^3/P.r_pol0^3
-
-kp = kp_ref * exp(-P.Ea./ P.R.*(1 ./ T - 1 / P.T_ref));        % m3/mol/s
+kp = kp_ref * exp(-P.Ea./ P.R.*(1 ./ T - 1 / P.T_ref));          % m3/mol/s
 
 kd = P.kd_ref * exp(-P.Ed ./ P.R.*(1 ./ T - 1 / P.T_ref));       % m3/mol/s
 
-C_star = C1_star .* exp(- kd .* res.t') + C2_star;           %(mole site/m3 de cata)
+C_star = C1_star .* exp(- kd .* res.t') + C2_star;               %(mole site/m3 de cata)
 
 Rp = kp .* C_star .* C1;                                         %(mol/m3/s)
 

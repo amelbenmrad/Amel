@@ -3,14 +3,18 @@ function [P,t_exp,Rp_exp] = variables(option,mesures)
     % Declare et initialise toutes les variables utilisées dans le programme principal "main"
     
     %% %%POLYMERIZATION KINETICS PARAMETERS%%%%
-    %P.kp_ref = 70.3;                           %constante de vitesse de propagation à Tref (m3/mol site/s)
+    P.kp_ref = 70.3;                           %constante de vitesse de propagation à Tref (m3/mol site/s)
     P.kd_ref = 1.56e-4;                         %constante de desactivation (s-1)
-%     P.C1_star = 1.37;                         %constante déterminant concentration aux SA au début de réaction (mole site/m3 de cata)
-%     P.C2_star = 0.45;                         %constante déterminant concentration aux SA à la fin de réaction (mole site/m3 de cata)
+    P.C1_star = 1.37;                         %constante déterminant concentration aux SA au début de réaction (mole site/m3 de cata)
+    P.C2_star = 0.45;                         %constante déterminant concentration aux SA à la fin de réaction (mole site/m3 de cata)
     P.Ea = 42000;                               %Energie d'activation (J/mol)
     P.Ed = 42000;                               %Energie de desactivation (J/mol)
     P.T_ref = 313.15;                           %température de réference (K)
     P.delta_Hp = -107500;                       %enthalpie de polymérisation de l'éthylène (J/mol)
+    P.ktH = 1.5*1e-3;                           %constante de vitesse de transfert de chaine par H2(m3/mol/s)
+    P.ki = 650*1e-3;                            %constante de vitesse d'initiation (m3/mol/s)
+    P.H2i = 0.05*1e3;                           %initial concentration of H2 (mol/m3)
+    %    P.Ci_star = 0.005*1e3;                          %???? initial concentration of active site (mol/m3)
     
     %% %%HYDRODYNAMICS OF REACTOR%%%%
     P.v = 0.02;                                 %vitesse relative gaz-particule (m/s) (Arash 0.02, Kosek 0.2)

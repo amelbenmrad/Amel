@@ -1,41 +1,9 @@
-clc
-clear all
-close all
-% format long g
-
-%% Experimental values
-% importdata Rp_Arash.xlsx
-% save Rp_Arash_.mat   ans
-load Rp_Arash_.mat
-mesures=ans.data;
-
-% Obtenir les valeurs des variables utiles pour ce programme
-option=1;   % Rp1
-[P,t_exp,Rp_exp] = variables(option,mesures); % This option is run only for 1 second
-
-%% CI
-kp_ref = 38.3305;                            %constante de vitesse de propagation à Tref (m3/mol site/s)
-D01= 1.7122e-07;                             %[m²/s]
-C1_star=1.0237;
-C2_star=   0.7960;
-
-option_opt=1;                                %0: No optimization // 1: optimization
+function [J] = crit_opt(u,P,t_exp,Rp_exp)
 global ic2
-if option_opt == 1
-    %% Optimisation
-    u0=[kp_ref;D01;C1_star;C2_star];
-    lb=[20;1e-8;1;0.2];
-    ub=[200;1e-6;2;1];
-    options_=[];
-    u=lsqnonlin(@(x)crit_opt(x,P,t_exp,Rp_exp),u0,lb,ub,options_)
-    %C=lsqnonlin(@(x)function(x,param),C0,lb,ub,options)%,[0,0,0,0],ub)%,options)
-    %%
-
-    kp_ref = u(1)                            %constante de vitesse de propagation à Tref (m3/mol site/s)
-    D01 = u(2)                                %[m²/s]
-    C1_star = u(3)
-    C2_star = u(4)
-end
+kp_ref = u(1)                            %constante de vitesse de propagation à Tref (m3/mol site/s)
+D01= u(2)              % [m²/s]  0.05*
+C1_star= u(3) 
+C2_star= u(4) 
 %% %%%%%%%%%%%%%%%%% BILAN DE MATIERE ET BILAN ENERGETIQUE %%%%%%%%%%%%%%%%%%%%%%
 
 %m peut prendre 0(slab), 1(cylindrical) ou 2(spherical)
@@ -93,4 +61,24 @@ for k = 1 : 60*120/pas                                                  % [s]/pa
     res.Rp1_ov = [res.Rp1_ov  ;  sum(Rp1(1,:).*dr.^3)./sum(dr.^3);sum(Rp1(2,:).*dr.^3)./sum(dr.^3)]; %(g.pol/g.cat/h)    
 
 end
-Displayplots
+
+%% Critère
+for k1=1:length(t_exp)
+    %ind1(k1)=min(find(abs(t_exp(k1)*60-res.t)<2.5));
+    ind1(k1)=min(find(abs(t_exp(k1)*60-res.t)<5));
+end
+J=(abs(res.Rp1_ov(ind1)-Rp_exp));
+sum(abs(J))
+%% Affichage
+figure(1)
+clf
+hold all
+plot(res.t/60, res.Rp1_ov, 'LineWidth', 2)   %sum(A,2) = vecteur colonne contenant la somme des lignes du vecteur A
+hold on
+plot(t_exp, Rp_exp, 'm*')   %sum(A,2) = vecteur colonne contenant la somme des lignes du vecteur A
+legend('Model','Experimental')
+xlabel('Time (min)', 'fontsize', 12, 'fontweight', 'b', 'fontname', 'arial')
+ylabel('Reaction rate (g.pol/g.cat/h)', 'fontsize', 12, 'fontweight' , 'b', 'fontname', 'arial')
+% Saxis([0 inf 0 1700])
+set(gca, 'FontSize', 12, 'fontweight', 'b', 'fontname', 'arial')
+pause(0.0001)
